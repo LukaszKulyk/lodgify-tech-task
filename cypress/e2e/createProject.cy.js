@@ -1,6 +1,4 @@
 import { TodoistApi } from "@doist/todoist-api-typescript"
-import { loginPageLocators, mainPageLocators } from '../support/locators';
-import LoginPage from "../pages/LoginPage";
 import MainPage from "../pages/MainPage";
 
 //env variables:
@@ -18,7 +16,7 @@ const newProjectData = {
   viewStyle: "board"
 }
 
-describe('Verify create project functionality', () => {
+describe('Verify create project functionality.', () => {
 
   let projectId;
 
@@ -44,7 +42,7 @@ describe('Verify create project functionality', () => {
       cy.visit('/auth/login');
   });
 
-  it('Verify if new project created from API is properly visible on web application', () => {
+  it('Verify if new project created from API is properly visible on web application.', () => {
 
       let createdProjectId = projectId;
 
@@ -131,5 +129,7 @@ describe('Verify create project functionality', () => {
     api.deleteProject(projectId)
         .then((isSuccess) => console.log(isSuccess))
         .catch((error) => console.log(error))
+
+    cy.logout();
   });
 })

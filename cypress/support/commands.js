@@ -24,12 +24,15 @@
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
-import { loginPageLocators } from "./locators";
 import LoginPage from "../pages/LoginPage";
 import MainPage from "../pages/MainPage";
 
-Cypress.Commands.add('getByDataGtmId',(data_test_id) => {
-    return cy.get(`[data-gtm-id=${data_test_id}]`)
+Cypress.Commands.add('getByDataGtmId',(data_gtm_id) => {
+    return cy.get(`[data-gtm-id=${data_gtm_id}]`)
+})
+
+Cypress.Commands.add('getByAriaLabel',(aria_label) => {
+    return cy.get(`[aria-label='${aria_label}']`)
 })
 
 Cypress.Commands.add('login', (username, password) => {
@@ -55,7 +58,6 @@ Cypress.Commands.add('logout', () => {
         .getSettingsButton()
         .click()
 
-    mainPage
-        .getLogoutButton()
+    cy.get("div[aria-label='Settings menu'] > button > span.user_menu_label").eq(2)
         .click()
 })
