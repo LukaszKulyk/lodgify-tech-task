@@ -1,0 +1,17 @@
+{
+  "name": "lodgify-tech-task",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "cypress": "^12.14.0"
+  },
+  "dependencies": {
+    "@doist/todoist-api-typescript": "^2.1.2"
+  }
+}
