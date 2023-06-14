@@ -11,6 +11,7 @@ module.exports = defineConfig({
   env: {
     email: 'testUser1234@test.com',
     password: 'Y*ukj#4sDw',
-    apiToken: 'ccca48314fd0c4852a6ffd295faf7b909b1aeb9f'
+    apiToken: 'ccca48314fd0c4852a6ffd295faf7b909b1aeb9f',
+    viewport: 'macbook-13'
     }
 });

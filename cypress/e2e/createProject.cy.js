@@ -5,6 +5,7 @@ import MainPage from "../pages/MainPage";
 const email = Cypress.env('email');
 const password = Cypress.env('password');
 const apiToken = Cypress.env('apiToken');
+const viewport = Cypress.env('viewport')
 
 
 const api = new TodoistApi(apiToken);
