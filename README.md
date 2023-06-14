@@ -18,6 +18,8 @@ Cypress by defaul is configured to capture a screenshots when test failed and th
 
 I have also decided to use default cypress reporter. Cypress is build on top of Mocha so we can easy use some other. Other Mocha reporters can be found here: [reporters](https://mochajs.org/#reporters). Cypress has also two build-in reporters which can be used: teamcity & junit.
 
+**AS A BONUS** I have decided to configure basic CI/CD using github actions. GitHub Actions makes sure that the tests are running whenever new changes are going to be pushed to the repository. Solution and test results can be found in Actions tab in github repository: [link](https://github.com/LukaszKulyk/lodgify-tech-task/actions/workflows/lodgify-tech-task.yml)
+
 ## Possible improvements
 - Adding Cucumber to the code to improve documentation quality and code undestanding for non technical person.
 - Adding more commands to reuse less code in the tests.

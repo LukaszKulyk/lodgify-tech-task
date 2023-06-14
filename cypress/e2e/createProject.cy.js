@@ -129,7 +129,5 @@ describe('Verify create project functionality.', () => {
     api.deleteProject(projectId)
         .then((isSuccess) => console.log(isSuccess))
         .catch((error) => console.log(error))
-
-    cy.logout();
   });
 })
