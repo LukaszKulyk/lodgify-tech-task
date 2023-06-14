@@ -1,0 +1,25 @@
+name: Lodgify tech task Cypress tests
+run-name: Running cypress tests.
+
+on:
+  push:
+    branches: ["master"]
+  pull_request:
+    branches: ["master"]
+
+jobs:
+  Run-Cypress-Tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v3
+      - name: Setup and Use Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.14.0
+      - name: Install all needed dependences
+        run: npm install
+      - name: Install Cypress
+        run: npm install cypress --save-dev
+      - name: Run Cypress tests
+        run: npx cypress run
