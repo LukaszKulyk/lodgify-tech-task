@@ -41,9 +41,9 @@ describe('Verify create new task functionality.', () => {
 
         cy.visit('/auth/login', {
             onBeforeLoad (win) {
-              //force London geolocation
-              const latitude = 51.5287398;
-              const longitude = -0.2664058;
+              //force Warsaw geolocation
+              const latitude = 52.2330335;
+              const longitude = 20.8963871;
               cy.stub(win.navigator.geolocation, 'getCurrentPosition').callsFake((cb) => {
                 return cb({ coords: { latitude, longitude } });
               });
