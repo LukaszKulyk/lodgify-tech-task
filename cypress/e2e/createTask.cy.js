@@ -39,7 +39,16 @@ describe('Verify create new task functionality.', () => {
             })
             .catch((error) => console.log(error))
 
-        cy.visit('/auth/login');
+        cy.visit('/auth/login', {
+            onBeforeLoad (win) {
+              //force London geolocation
+              const latitude = 51.5287398;
+              const longitude = -0.2664058;
+              cy.stub(win.navigator.geolocation, 'getCurrentPosition').callsFake((cb) => {
+                return cb({ coords: { latitude, longitude } });
+              });
+            },
+          });
         cy.login(email, password);
 
         const mainPage = new MainPage();
