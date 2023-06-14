@@ -13,7 +13,15 @@ const api = new TodoistApi(apiToken);
 const newTaskData = {
   name: "New Task",
   description: "This is a small test description for testing purpose.",
-  label: "testLabel"
+  label: "testLabel",
+  priority: 2,
+}
+
+const newApiTaskData = {
+    name: "New Task from API",
+    description: "New task created using API call",
+    label: 'APIRequestLabel',
+    priority: 1,
 }
 
 const projectName = "Test Task Project";
@@ -22,7 +30,7 @@ describe('Verify create new task functionality.', () => {
 
     let projectId;
 
-    before(() => {
+    beforeEach(() => {
 
         api.addProject({ name: projectName })
             .then(response => {
@@ -95,11 +103,11 @@ describe('Verify create new task functionality.', () => {
         .click();
 
     mainPage
-        .selectPriorityFromTheListOfPrioritiesByValue(2)
+        .selectPriorityFromTheListOfPrioritiesByValue(newTaskData.priority)
         .click();
 
     mainPage
-        .getTaskPriorityByValue(2)
+        .getTaskPriorityByValue(newTaskData.priority)
         .should('exist')
         .and('be.visible');
 
@@ -148,33 +156,88 @@ describe('Verify create new task functionality.', () => {
         .getListOfProjectItems()
         .invoke('attr', 'data-item-id')
         .then($taskId => {
-            mainPage
-                .getTaskById($taskId)
-                .should('exist')
-                .and('be.visible');
+                mainPage
+                    .getTaskById($taskId)
+                    .should('exist')
+                    .and('be.visible');
 
-            api.getTask($taskId)
-                .then(response => {
-                    expect(response).to.have.property('id', $taskId).to.match(/\d+/);
-                    expect(response).to.have.property('content', newTaskData.name).to.be.a('string');
-                    expect(response).to.have.property('description', newTaskData.description).to.be.a('string');
-                    expect(response).to.have.property('labels').to.be.an('array').and.to.include(newTaskData.label);
-                    expect(response).to.have.property('isCompleted', false).to.be.a('boolean');
-                    expect(response).to.have.property('priority', 3).to.be.a('number');
-                    expect(response).to.have.property('projectId', createdProjectId).to.be.a('string');
-                    expect(response).to.have.property('order').to.be.a('number');
-                    expect(response).to.have.property('url', `https://todoist.com/showTask?id=${$taskId}`).to.be.a('string');
-                    expect(response).to.have.property('due').to.be.a(null);
-                })
-                .catch((error) => console.log(error))
+                api.getTask($taskId)
+                    .then(response => {
+                        expect(response).to.have.property('id', $taskId).to.match(/\d+/);
+                        expect(response).to.have.property('content', newTaskData.name).to.be.a('string');
+                        expect(response).to.have.property('description', newTaskData.description).to.be.a('string');
+                        expect(response).to.have.property('labels').to.be.an('array').and.to.include(newTaskData.label);
+                        expect(response).to.have.property('isCompleted', false).to.be.a('boolean');
+                        expect(response).to.have.property('priority', newTaskData.priority).to.be.a('number');
+                        expect(response).to.have.property('projectId', createdProjectId).to.be.a('string');
+                        expect(response).to.have.property('order').to.be.a('number');
+                        expect(response).to.have.property('url', `https://todoist.com/showTask?id=${$taskId}`).to.be.a('string');
+                        expect(response).to.have.property('due').to.be.a(null);
+                    })
+                    .catch((error) => console.log(error))
     })
   });
 
-  after(() => {
+  it('Verify if new task created from API is properly available on WEB page.', () => {
+
+    let createdProjectId = projectId;
+
+    api.addTask({
+        content: newApiTaskData.name,
+        description: newApiTaskData.description,
+        projectId: projectId,
+        labels: [newApiTaskData.label],
+        priority: newApiTaskData.priority
+        })
+        .then(response => {
+            return new Cypress.Promise((resolve, reject) => {
+                expect(response).to.have.property('id', response.id).to.match(/\d+/);
+                expect(response).to.have.property('content', newApiTaskData.name).to.be.a('string');
+                expect(response).to.have.property('description', newApiTaskData.description).to.be.a('string');
+                expect(response).to.have.property('labels').to.be.an('array').and.to.include(newApiTaskData.label);
+                expect(response).to.have.property('isCompleted', false).to.be.a('boolean');
+                expect(response).to.have.property('priority', newApiTaskData.priority).to.be.a('number');
+                expect(response).to.have.property('projectId', projectId).to.be.a('string');
+                expect(response).to.have.property('order').to.be.a('number');
+                expect(response).to.have.property('url', `https://todoist.com/showTask?id=${response.id}`).to.be.a('string');
+                expect(response).to.have.property('due').to.be.a(null);
+            })
+        })
+        .catch((error) => console.log(error));
+
+    const mainPage = new MainPage();
+
+    mainPage
+        .getProjectById(createdProjectId)
+        .click()
+        
+    mainPage
+        .getProjectDashboardByProjectId(createdProjectId)
+        .should('exist')
+        .and('be.visible');
+        
+    mainPage
+        .getListOfProjectItems()
+        .should('have.length', 1);
+        
+    mainPage
+        .getTaskContent()
+        .should('have.text', newApiTaskData.name);
+        
+    mainPage
+        .getTaskDescription()
+        .should('have.text', newApiTaskData.description);
+        
+    mainPage
+        .getTaskLabel()
+        .should('have.text', newApiTaskData.label);
+    
+
+  })
+
+  afterEach(() => {
     api.deleteProject(projectId)
         .then((isSuccess) => console.log(isSuccess))
         .catch((error) => console.log(error))
-
-    cy.logout();
   });
 })
